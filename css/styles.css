@@ -1,0 +1,56 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-size: 16px;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    line-height: 1.8em;
+    background-color: rgb(57, 52, 78);
+    color: aliceblue;
+}
+
+
+/* .navbar-brand {
+    text-align: center;
+} */
+
+nav {
+    background-color: rgb(32, 23, 77);
+}
+
+nav.bg {
+    color: aliceblue;
+    /* background-color: rgb(214 182 167); */
+    background-image: linear-gradient(to right, rgb(205 204 210), rgb(173 148 136));
+}
+
+a.list-group-item-dark {
+    background-color: rgb(118, 105, 184);
+    color: aliceblue;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
+/* .pimg {
+    position: relative;
+    opacity: 0.70;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-image: url('../img/pimg.png');
+    min-height: 100%;
+} */
+
+
+/* @media(max-width:1030px) { */
+
+
+/* .pimg {
+        background-attachment: scroll;
+    } */
+
+
+/* } */

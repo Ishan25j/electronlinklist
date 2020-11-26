@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ShoppingList</title>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg sticky-top">
+        <a class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-25" href="#">
+            LinkList
+        </a>
+    </nav>
+    <div class="pimg">
+        <ul>
+            <br>
+        </ul>
+    </div>
+
+    <script>
+        const electron = require('electron');
+        const {
+            ipcRenderer
+        } = electron;
+
+        const fs = require('fs');
+
+        let rawdata = fs.readFileSync('./student.json');
+        let student = JSON.parse(rawdata);
+
+        const ul = document.querySelector('ul');
+        student.forEach(link => {
+            ul.className = 'list-group';
+            const li = document.createElement('a');
+            if (link) {
+                li.className = 'list-group-item list-group-item-action list-group-item-dark';
+                const itemText = document.createTextNode(link);
+                var getLink = link.split(/[-]/)[0];
+                getLink = getLink.trim();
+                li.setAttribute('href', getLink);
+                li.setAttribute('target', "_blank");
+                li.appendChild(itemText);
+                ul.appendChild(li);
+            }
+        })
+
+
+
+        ipcRenderer.on('item:add', function(e, item) {
+            ul.className = 'list-group';
+            //const li = document.createElement('li');
+            //li.className = 'collection-item';
+            //const itemText = document.createTextNode(item);
+
+            //li.appendChild(itemText);
+            //ul.appendChild(li);
+            const li = document.createElement('a');
+            li.className = 'list-group-item list-group-item-action list-group-item-dark';
+            const itemText = document.createTextNode(item);
+            var getLink = item.split(/[-]/)[0];
+            getLink = getLink.trim();
+            li.setAttribute('href', getLink);
+            li.setAttribute('target', "_blank");
+            li.appendChild(itemText);
+            ul.appendChild(li);
+            student.push(item);
+            console.log("item is " + item)
+            fs.writeFileSync('./student.json', JSON.stringify(student));
+        });
+
+        ipcRenderer.on('item:clear', function() {
+            ul.className = '';
+            ul.innerHTML = '';
+            student = [];
+            fs.writeFileSync('./student.json', JSON.stringify(student));
+        });
+
+        var pressTimer;
+        ul.addEventListener('mousedown', removeItem);
+        ul.addEventListener('mouseup', function() {
+            clearTimeout(pressTimer);
+        })
+
+        function removeItem(e) {
+            console.log('e is' + e)
+            pressTimer = window.setTimeout(function() {
+                console.log("event target:" + e.target.innerHTML)
+                e.target.remove();
+                removeElement(student, e.target.innerHTML)
+                if (ul.children.length == 0) {
+                    ul.className = '';
+                }
+
+                fs.writeFileSync('./student.json', JSON.stringify(student));
+            }, 1000)
+        }
+
+        function removeElement(array, elem) {
+            if (array && array != null) {
+                var index = array.indexOf(elem);
+                if (index > -1) {
+                    array.splice(index, 1);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
